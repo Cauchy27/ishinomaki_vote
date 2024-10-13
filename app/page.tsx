@@ -16,7 +16,7 @@ const Home: NextPage = () => {
 
   const updateBattleData = async(player:number) => {
     const storage = Supabase.from("Battle");
-    let { data, error } = await storage.select(`player1Count, player2Count`).eq("id",targetId);
+    const { data, error } = await storage.select(`player1Count, player2Count`).eq("id",targetId);
     if(error){
       return setOpenSnackbar(true);
     }
@@ -32,6 +32,24 @@ const Home: NextPage = () => {
     }
     return setOpenSnackbar(true);
   }
+  const getBattleData = async() => {
+    const storage = Supabase.from("Battle");
+    const { data, error } = await storage.select(`player1Name, player2Name`).eq("id",targetId);
+    if(error){
+      return setOpenSnackbar(true);
+    }
+    if(data){
+      if(data[0]?.player1Name && data[0]?.player2Name){
+        soundPlay("/sound/effect.mp3")
+        return setPlayers([data[0].player1Name, data[0].player2Name])
+      }
+    }
+    return setOpenSnackbar(true);
+  }
+
+  useEffect(()=>{
+    getBattleData();
+  },[targetId]);
 
   const handleCloseSnackbar = (
     event?: React.SyntheticEvent | Event,
@@ -133,7 +151,7 @@ const Home: NextPage = () => {
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
           <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
-            投票に失敗しました！
+            失敗しました！
             IDを確認してください！！
           </Alert>
         </Snackbar>
