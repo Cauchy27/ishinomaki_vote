@@ -22,11 +22,11 @@ const Home: NextPage = () => {
     }
     if(data){
       if(player==1 && data[0]?.player1Count){
-        soundPlay("/sound/effect.mp3")
+        // soundPlay("/sound/effect.mp3")
         return await storage.update({player1Count:data[0].player1Count+1}).eq('id',targetId).select()
       }
       if(player==2 && data[0]?.player1Count){
-        soundPlay("/sound/effect.mp3")
+        // soundPlay("/sound/effect.mp3")
         return await storage.update({player2Count:data[0].player2Count+1}).eq('id',targetId).select()
       }
     }
@@ -40,7 +40,7 @@ const Home: NextPage = () => {
     }
     if(data){
       if(data[0]?.player1Name && data[0]?.player2Name){
-        soundPlay("/sound/effect.mp3")
+        // soundPlay("/sound/effect.mp3")
         return setPlayers([data[0].player1Name, data[0].player2Name])
       }
     }
@@ -61,40 +61,40 @@ const Home: NextPage = () => {
     setOpenSnackbar(false);
   };
 
-  // 音の再生
-  let ctxp = new AudioContext();
-  let EffectSource
+  // // 音の再生
+  // let ctxp = new AudioContext();
+  // let EffectSource
 
-   // 音源を取得しAudioBuffer形式に変換して返す関数
-  async function setupEffect(soundUrl:string) {
-    console.log(soundUrl);
-    const response = await fetch(soundUrl);
+  //  // 音源を取得しAudioBuffer形式に変換して返す関数
+  // async function setupEffect(soundUrl:string) {
+  //   console.log(soundUrl);
+  //   const response = await fetch(soundUrl);
 
-    console.log(response);
+  //   console.log(response);
 
-    ctxp = new AudioContext();
+  //   ctxp = new AudioContext();
 
-    const arrayBuffer = await response.arrayBuffer();
-    // Web Audio APIで使える形式に変換
-    const audioBuffer = await ctxp.decodeAudioData(arrayBuffer);
-    return audioBuffer;
-  }
+  //   const arrayBuffer = await response.arrayBuffer();
+  //   // Web Audio APIで使える形式に変換
+  //   const audioBuffer = await ctxp.decodeAudioData(arrayBuffer);
+  //   return audioBuffer;
+  // }
 
-  function playEffect(ctx:AudioContext, audioBuffer:AudioBuffer) {
-    EffectSource = ctx.createBufferSource();
-    // 変換されたバッファーを音源として設定
-    EffectSource.buffer = audioBuffer;
-    // 出力につなげる
-    EffectSource.connect(ctx.destination);
-    EffectSource.start();
-  }
+  // function playEffect(ctx:AudioContext, audioBuffer:AudioBuffer) {
+  //   EffectSource = ctx.createBufferSource();
+  //   // 変換されたバッファーを音源として設定
+  //   EffectSource.buffer = audioBuffer;
+  //   // 出力につなげる
+  //   EffectSource.connect(ctx.destination);
+  //   EffectSource.start();
+  // }
 
-  const soundPlay = async(soundUrl:string) =>{
-    if (typeof window !== 'undefined') {
-      const effect = await setupEffect(soundUrl);
-      playEffect(ctxp, effect);
-    }
-  }
+  // const soundPlay = async(soundUrl:string) =>{
+  //   if (typeof window !== 'undefined') {
+  //     const effect = await setupEffect(soundUrl);
+  //     playEffect(ctxp, effect);
+  //   }
+  // }
 
   return (
     <div>
