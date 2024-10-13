@@ -1,101 +1,145 @@
-import Image from "next/image";
+"use client"
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import { useState, useEffect } from 'react';
+import VoteButton from './_component/VoteButton';
+import { Typography, Container, Box, Snackbar, Alert } from '@mui/material';
+import { Supabase } from './_component/supabase';
 
-export default function Home() {
+import InputField from './_component/inputField';
+
+const Home: NextPage = () => {
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+
+  const [players, setPlayers] = useState<string[]>(["player1","player2"]);
+  const [targetId, setTargetId] = useState<string>("0");
+
+  const updateBattleData = async(player:number) => {
+    const storage = Supabase.from("Battle");
+    let { data, error } = await storage.select(`player1Count, player2Count`).eq("id",targetId);
+    if(error){
+      return setOpenSnackbar(true);
+    }
+    if(data){
+      if(player==1 && data[0]?.player1Count){
+        soundPlay("/sound/effect.mp3")
+        return await storage.update({player1Count:data[0].player1Count+1}).eq('id',targetId).select()
+      }
+      if(player==2 && data[0]?.player1Count){
+        soundPlay("/sound/effect.mp3")
+        return await storage.update({player2Count:data[0].player2Count+1}).eq('id',targetId).select()
+      }
+    }
+    return setOpenSnackbar(true);
+  }
+
+  const handleCloseSnackbar = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  // おと
+  let ctxp = new AudioContext();
+  let EffectSource
+
+   // 音源を取得しAudioBuffer形式に変換して返す関数
+  async function setupEffect(soundUrl:string) {
+    console.log(soundUrl);
+    const response = await fetch(soundUrl);
+
+    console.log(response);
+
+    ctxp = new AudioContext();
+
+    const arrayBuffer = await response.arrayBuffer();
+    // Web Audio APIで使える形式に変換
+    const audioBuffer = await ctxp.decodeAudioData(arrayBuffer);
+    return audioBuffer;
+  }
+
+  function playEffect(ctx:AudioContext, audioBuffer:AudioBuffer) {
+    EffectSource = ctx.createBufferSource();
+    // 変換されたバッファーを音源として設定
+    EffectSource.buffer = audioBuffer;
+    // 出力につなげる
+    EffectSource.connect(ctx.destination);
+    EffectSource.start();
+  }
+
+  const soundPlay = async(soundUrl:string) =>{
+    if (typeof window !== 'undefined') {
+      const effect = await setupEffect(soundUrl);
+      playEffect(ctxp, effect);
+    }
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <div>
+      <Head>
+        <title>可愛い投票アプリ</title>
+        <meta
+          name="description"
+          content="ベビーピンクとライトブルーのどちらが好きか投票しよう！"
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+      <Container
+        maxWidth="sm"
+        className="flex flex-col items-center justify-center min-h-screen bg-pink-50"
+      >
+        <Box className="w-full p-6 mb-20 space-y-6 bg-white rounded-lg shadow-lg">
+          <Typography variant="h4" className="text-center text-pink-500">
+            IDを入力してください
+          </Typography>
+
+          <InputField 
+            label="ID" 
+            placeholder="ここに対戦IDを入力してください" 
+            value={targetId}
+            onChange={(value) => setTargetId(value)}
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        </Box>
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          className="text-center text-pink-500"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
+          かわいかったら、その分だけボタンを押してください❤️
+        </Typography>
+        <Box className="w-full space-y-20">
+          <VoteButton
+            color="babyPink"
+            label={players[0]}
+            onVote={() => updateBattleData(1)}
           />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <VoteButton
+            color="lightBlue"
+            label={players[1]}
+            onVote={() => updateBattleData(2)}
+          />
+        </Box>
+
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+            投票に失敗しました！
+            IDを確認してください！！
+          </Alert>
+        </Snackbar>
+      </Container>
     </div>
   );
-}
+};
+
+export default Home;
