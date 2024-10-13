@@ -21,11 +21,11 @@ const Home: NextPage = () => {
       return setOpenSnackbar(true);
     }
     if(data){
-      if(player==1 && data[0]?.player1Count){
+      if(player==1 && data[0]?.player1Count >=0){
         // soundPlay("/sound/effect.mp3")
         return await storage.update({player1Count:data[0].player1Count+1}).eq('id',targetId).select()
       }
-      if(player==2 && data[0]?.player1Count){
+      if(player==2 && data[0]?.player1Count>=0){
         // soundPlay("/sound/effect.mp3")
         return await storage.update({player2Count:data[0].player2Count+1}).eq('id',targetId).select()
       }
