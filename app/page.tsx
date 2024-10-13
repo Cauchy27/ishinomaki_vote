@@ -61,7 +61,7 @@ const Home: NextPage = () => {
     setOpenSnackbar(false);
   };
 
-  // おと
+  // 音の再生
   let ctxp = new AudioContext();
   let EffectSource
 
