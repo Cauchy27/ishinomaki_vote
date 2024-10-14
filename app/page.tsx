@@ -57,11 +57,11 @@ const Home: NextPage = () => {
     }
     if (data) {
       if (player === 1 && data[0]?.player1Count >= 0) {
-        soundPlay("/sound/effect.mp3");
+        soundPlay("/sound/kyun.mp3");
         return await storage.update({ player1Count: data[0].player1Count + 1 }).eq('id', targetId).select();
       }
       if (player === 2 && data[0]?.player2Count >= 0) {
-        soundPlay("/sound/effect.mp3");
+        soundPlay("/sound/kyun.mp3");
         return await storage.update({ player2Count: data[0].player2Count + 1 }).eq('id', targetId).select();
       }
     }
@@ -76,7 +76,7 @@ const Home: NextPage = () => {
     }
     if (data) {
       if (data[0]?.player1Name && data[0]?.player2Name) {
-        soundPlay("/sound/effect.mp3");
+        soundPlay("/sound/kyun.mp3");
         return setPlayers([data[0].player1Name, data[0].player2Name]);
       }
     }
