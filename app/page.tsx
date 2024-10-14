@@ -8,6 +8,10 @@ import { Supabase } from './_component/supabase';
 
 import InputField from './_component/inputField';
 
+// 音の再生
+let ctxp = new AudioContext();
+let EffectSource
+
 const Home: NextPage = () => {
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
 
@@ -61,11 +65,7 @@ const Home: NextPage = () => {
     setOpenSnackbar(false);
   };
 
-  // 音の再生
-  let ctxp = new AudioContext();
-  let EffectSource
-
-   // 音源を取得しAudioBuffer形式に変換して返す関数
+  // 音源を取得しAudioBuffer形式に変換して返す関数
   async function setupEffect(soundUrl:string) {
     console.log(soundUrl);
     const response = await fetch(soundUrl);
