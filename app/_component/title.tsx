@@ -24,14 +24,14 @@ const Title2 = ({ setTitle }) => {
   };
 
   // 背景色切り替え用のstate
-  const [bgColor, setBgColor] = useState('');
+  // const [bgColor, setBgColor] = useState('');
 
-  useEffect(() => {
-    document.body.style.background = bgColor;
-    return () => {
-      document.body.style.backgroundColor = '';
-    };
-  }, [bgColor]);
+  // useEffect(() => {
+  //   document.body.style.background = bgColor;
+  //   return () => {
+  //     document.body.style.backgroundColor = '';
+  //   };
+  // }, [bgColor]);
 
   // テキストスタイル
   const textStyle = {
@@ -57,10 +57,10 @@ const Title2 = ({ setTitle }) => {
   };
 
   // ボタンホバー時のエフェクト
-  const buttonHoverStyle = {
-    ...buttonStyle,
-    transform: 'scale(1.1)', // ホバー時に少し拡大
-  };
+  // const buttonHoverStyle = {
+  //   ...buttonStyle,
+  //   transform: 'scale(1.1)', // ホバー時に少し拡大
+  // };
 
   return (
     <>

@@ -1,4 +1,5 @@
 "use client";
+
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useState, useEffect, useRef } from 'react';
@@ -9,21 +10,34 @@ import { Supabase } from './_component/supabase';
 import InputField from './_component/inputField';
 import Title2 from './_component/title';
 
+// Extend the Window interface to include webkitAudioContext
+declare global {
+  interface Window {
+    webkitAudioContext?: typeof AudioContext;
+  }
+}
+
 const Home: NextPage = () => {
   const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
   const [players, setPlayers] = useState<string[]>(["player1", "player2"]);
   const [targetId, setTargetId] = useState<string>("0");
   const [title, setTitle] = useState<boolean>(true);
 
-  // Ref for AudioContext and EffectSource
+  // Refs for AudioContext and EffectSource
   const audioContextRef = useRef<AudioContext | null>(null);
   const effectSourceRef = useRef<AudioBufferSourceNode | null>(null);
 
   useEffect(() => {
     // Initialize AudioContext only on the client
     if (typeof window !== 'undefined') {
-      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextConstructor) {
+        audioContextRef.current = new AudioContextConstructor();
+      } else {
+        console.error('Web Audio API is not supported in this browser.');
+      }
     }
+
     return () => {
       // Clean up AudioContext on unmount
       if (audioContextRef.current) {
@@ -104,10 +118,11 @@ const Home: NextPage = () => {
   // Function to play the audio
   const playEffect = (audioBuffer: AudioBuffer) => {
     if (audioContextRef.current) {
-      effectSourceRef.current = audioContextRef.current.createBufferSource();
-      effectSourceRef.current.buffer = audioBuffer;
-      effectSourceRef.current.connect(audioContextRef.current.destination);
-      effectSourceRef.current.start();
+      const source = audioContextRef.current.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContextRef.current.destination);
+      source.start();
+      effectSourceRef.current = source;
     }
   };
 
