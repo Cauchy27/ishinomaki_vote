@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from 'react';
-import {  useState } from 'react';
+import { useState } from 'react';
 
 const Title2 = ({ setTitle }) => {
 
@@ -45,12 +45,6 @@ const Title2 = ({ setTitle }) => {
     cursor: 'pointer',
     transition: 'transform 0.3s ease', // ホバーエフェクトのためにトランジションを追加
   };
-
-  // ボタンホバー時のエフェクト
-  // const buttonHoverStyle = {
-  //   ...buttonStyle,
-  //   transform: 'scale(1.1)', // ホバー時に少し拡大
-  // };
 
   return (
     <>
