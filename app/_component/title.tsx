@@ -23,16 +23,6 @@ const Title2 = ({ setTitle }) => {
     setColor(prevColor => (prevColor === '#ff00ff' ? '#ff69b4' : '#ff00ff'));
   };
 
-  // 背景色切り替え用のstate
-  // const [bgColor, setBgColor] = useState('');
-
-  // useEffect(() => {
-  //   document.body.style.background = bgColor;
-  //   return () => {
-  //     document.body.style.backgroundColor = '';
-  //   };
-  // }, [bgColor]);
-
   // テキストスタイル
   const textStyle = {
     margin: 'auto',
