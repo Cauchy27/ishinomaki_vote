@@ -4,66 +4,26 @@ import * as React from 'react';
 import { useState } from 'react';
 
 const Title2 = ({ setTitle }) => {
-
-  // 背景グラデーションスタイル
-  const backgroundStyle = {
-    height: '100vh', // 全画面をカバー
-    background: 'linear-gradient(135deg, #ffccf9 0%, #b3e5fc 100%)', // 淡いピンク(#ffccf9)からライトブルー(#b3e5fc)のグラデーション
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    display: 'flex', // コンテンツを中央に配置
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column', // ボタンとテキストを縦に配置
-  };
-
-  // 色切り替え
-  const [color, setColor] = useState('#ff00ff');
+  const [color, setColor] = useState('bg-fuchsia-500');
+  
   const toggleColor = () => {
-    setColor(prevColor => (prevColor === '#ff00ff' ? '#ff69b4' : '#ff00ff'));
-  };
-
-  // テキストスタイル
-  const textStyle = {
-    margin: 'auto',
-    textAlign: 'center',
-    fontSize: '4em',
-    fontFamily: '"Comic Sans MS", cursive, sans-serif', // 可愛らしいフォントに変更
-    color: 'darkblue',
-    textShadow: '2px 2px 5px lightpink', // 影をつけてポップな印象に
-  };
-
-  // ボタンスタイル
-  const buttonStyle = {
-    backgroundColor: color,
-    color: 'white',
-    padding: '20px 50px',
-    border: 'none',
-    borderRadius: '50px',
-    fontSize: '1.5em',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    transition: 'transform 0.3s ease', // ホバーエフェクトのためにトランジションを追加
+    setColor(prevColor => (prevColor === 'bg-fuchsia-500' ? 'bg-pink-400' : 'bg-fuchsia-500'));
   };
 
   return (
-    <>
-      <div style={backgroundStyle}>
-        <div>
-          <p style={textStyle}>
-            かわいい投票❤️
-          </p>
-        </div>
-        <button
-          onClick={() => { toggleColor(); setTitle(); }}
-          style={buttonStyle}
-          onMouseOver={e => e.currentTarget.style.transform = 'scale(1.1)'}
-          onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}
-        >
-          スタート
-        </button>
+    <div className="h-screen bg-gradient-to-br from-pink-200 to-blue-200 flex justify-center items-center flex-col">
+      <div>
+        <p className="text-center text-6xl font-comic-sans text-blue-900 drop-shadow-[2px_2px_5px_rgba(255,182,193,0.5)]">
+          かわいい投票❤️
+        </p>
       </div>
-    </>
+      <button
+        onClick={() => { toggleColor(); setTitle(); }}
+        className={`${color} text-white px-12 py-5 rounded-full text-2xl font-bold cursor-pointer transition-transform duration-300 ease-in-out hover:scale-110`}
+      >
+        スタート
+      </button>
+    </div>
   );
 };
 
