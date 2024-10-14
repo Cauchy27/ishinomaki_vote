@@ -14,7 +14,7 @@ const Title2 = ({ setTitle }) => {
     <div className="h-screen bg-gradient-to-br from-pink-200 to-blue-200 flex justify-center items-center flex-col">
       <div>
         <p className="text-center text-6xl font-comic-sans text-blue-900 drop-shadow-[2px_2px_5px_rgba(255,182,193,0.5)]">
-          かわいい投票❤️
+        ❤️かわいい投票❤️
         </p>
       </div>
       <button
