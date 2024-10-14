@@ -23,6 +23,9 @@ const Home: NextPage = () => {
   const [targetId, setTargetId] = useState<string>("0");
   const [title, setTitle] = useState<boolean>(true);
 
+  const [count1, setCount1]=useState<number>(0);
+  const [count2, setCount2]=useState<number>(0);
+
   // Refs for AudioContext and EffectSource
   const audioContextRef = useRef<AudioContext | null>(null);
   const effectSourceRef = useRef<AudioBufferSourceNode | null>(null);
@@ -166,7 +169,7 @@ const Home: NextPage = () => {
                 label="ID"
                 placeholder="ここに対戦IDを入力してください"
                 value={targetId}
-                onChange={(value) => setTargetId(value)}
+                onChange={(value) => {setTargetId(value);setCount1(0);setCount2(0);}}
               />
             </Box>
             <Typography
@@ -180,13 +183,13 @@ const Home: NextPage = () => {
             <Box className="w-full space-y-20">
               <VoteButton
                 color="babyPink"
-                label={players[0]}
-                onVote={() => updateBattleData(1)}
+                label={players[0]+":"+count1}
+                onVote={() => {updateBattleData(1);setCount1((prev)=> prev+1);}}
               />
               <VoteButton
                 color="lightBlue"
-                label={players[1]}
-                onVote={() => updateBattleData(2)}
+                label={players[1]+":"+count2}
+                onVote={() => {updateBattleData(2);setCount2((prev)=> prev+1);}}
               />
             </Box>
 
