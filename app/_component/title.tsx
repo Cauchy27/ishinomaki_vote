@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import {  useState } from 'react';
 
 const Title2 = ({ setTitle }) => {
 
